@@ -54,8 +54,12 @@ jobs:
         run: npx wait-on http://localhost:3000
 
       - name: Run Cypress tests
-        run: npx cypress run --browser chrome
-        continue-on-error: true
+        run: npx cypress run || echo "CYPRESS_FAILED=true" >> $GITHUB_ENV
 
       - name: Generate Reports
-        run: cypress-mochawesome-reporter
+        if: always()
+        run: npx mochawesome-merge && npx merge report.json
+
+      - name: Fail if tests failed
+        if: env.CYPRESS_FAILED == 'true'
+        run: exit 1

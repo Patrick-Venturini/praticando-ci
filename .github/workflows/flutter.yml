@@ -42,7 +42,7 @@ jobs:
           path: build/web
 
       - name: Install Node Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Install serve
         run: npm install -g serve
@@ -56,9 +56,23 @@ jobs:
       - name: Run Cypress tests
         run: npx cypress run || echo "CYPRESS_FAILED=true" >> $GITHUB_ENV
 
-      - name: Generate Reports
+      - name: Merge Reports
         if: always()
-        run: npx mochawesome-merge cypress/reports/*.json > report.json
+        run: npx mochawesome-merge cypress/reports/*.json > report.json || echo "No reports"
+
+      - name: Generate HTML Report
+        if: always()
+        run: npx marge report.json --reportDir mochawesome-report
+
+      - name: Upload Cypress artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-artifacts
+          path: |
+            mochawesome-report
+            cypress/screenshots
+            cypress/videos
 
       - name: Fail if tests failed
         if: env.CYPRESS_FAILED == 'true'

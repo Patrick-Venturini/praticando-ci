@@ -8,7 +8,7 @@ describe('template spec', () => {
 
     cy.contains('Cadastrar').click({ force: true })
 
-    cy.contains('Patrick')
+    cy.contains('Patrick V')
       .should('be.visible')
       .and('contain.text', 'email@teste.com');
   });

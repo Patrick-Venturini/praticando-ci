@@ -56,3 +56,6 @@ jobs:
       - name: Run Cypress tests
         run: npx cypress run --browser chrome
         continue-on-error: true
+
+      - name: Generate Reports
+        run: cypress-mochawesome-reporter

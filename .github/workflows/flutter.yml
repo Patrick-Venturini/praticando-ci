@@ -58,7 +58,7 @@ jobs:
 
       - name: Generate Reports
         if: always()
-        run: npx mochawesome-merge && npx merge report.json
+        run: npx mochawesome-merge cypress/reports/*.json > report.json
 
       - name: Fail if tests failed
         if: env.CYPRESS_FAILED == 'true'

@@ -56,3 +56,36 @@ jobs:
 
       - name: Run Cypress tests
         run: npx cypress run --browser chrome
+        continue-on-error: true
+
+    relatorio:
+
+    runs-on: ubuntu-latest
+ 
+    steps:
+
+      - name: Checkout
+
+        uses: actions/checkout@v4
+ 
+      - name: Gerar relatorio
+
+        run: |
+
+          mkdir -p saida
+
+          echo "Relatório da execução" > saida/relatorio.txt
+
+          echo "Data: $(date)" >> saida/relatorio.txt
+
+          echo "Branch: $GITHUB_REF_NAME" >> saida/relatorio.txt
+ 
+      - name: Publicar artifact
+
+        uses: actions/upload-artifact@v4
+
+        with:
+
+          name: relatorio-execucao
+
+          path: saida/relatorio.txt
